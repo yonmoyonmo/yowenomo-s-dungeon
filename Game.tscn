@@ -1,0 +1,181 @@
+[gd_scene format=3 uid="uid://c2grb65ca7nbx"]
+
+[ext_resource type="Script" uid="uid://o5abgxvt1nh6" path="res://player.gd" id="1_wbfu4"]
+[ext_resource type="Script" uid="uid://uhlf4ggs2ysq" path="res://game.gd" id="1_xkndl"]
+
+[node name="Control" type="Control" unique_id=1761922556]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xkndl")
+
+[node name="Label" type="Label" parent="." unique_id=1452611000]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Game"
+
+[node name="World" type="Node2D" parent="." unique_id=589566301]
+
+[node name="Player" type="ColorRect" parent="World" unique_id=1565221024]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.40963566, 0.20490965, 0.2375066, 1)
+script = ExtResource("1_wbfu4")
+
+[node name="HUD" type="Control" parent="." unique_id=116705604]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 961.0
+grow_horizontal = 2
+
+[node name="TurnLabel" type="Label" parent="HUD" unique_id=891015923]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 40
+
+[node name="LogLabel" type="Label" parent="HUD" unique_id=168247117]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 40
+
+[node name="DirLabel" type="Label" parent="HUD" unique_id=702764812]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 55.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+
+[node name="FPView" type="Control" parent="HUD" unique_id=862265846]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Far" type="Control" parent="HUD/FPView" unique_id=36344148]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Front" type="ColorRect" parent="HUD/FPView/Far" unique_id=1418913906]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.375
+anchor_top = 0.4
+anchor_right = 0.625
+anchor_bottom = 0.6
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12382164, 0.12382164, 0.12382164, 1)
+
+[node name="Left" type="ColorRect" parent="HUD/FPView/Far" unique_id=1286707315]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 384.0
+offset_right = 204.0
+offset_bottom = 580.0
+color = Color(0.1254902, 0.1254902, 0.1254902, 1)
+
+[node name="Right" type="ColorRect" parent="HUD/FPView/Far" unique_id=1197469434]
+layout_mode = 0
+offset_left = 338.0
+offset_top = 386.0
+offset_right = 536.0
+offset_bottom = 581.0
+color = Color(0.1254902, 0.1254902, 0.1254902, 1)
+
+[node name="Mid" type="Control" parent="HUD/FPView" unique_id=1628483226]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Front" type="ColorRect" parent="HUD/FPView/Mid" unique_id=1528784288]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.325
+anchor_right = 0.7
+anchor_bottom = 0.675
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.5586679, 0.55866766, 0.55866766, 1)
+
+[node name="Left" type="ColorRect" parent="HUD/FPView/Mid" unique_id=636402946]
+layout_mode = 0
+offset_left = 378.0
+offset_top = 312.0
+offset_right = 540.0
+offset_bottom = 650.0
+color = Color(0.5568628, 0.5568628, 0.5568628, 1)
+
+[node name="Right" type="ColorRect" parent="HUD/FPView/Mid" unique_id=1422221915]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 312.0
+offset_right = 162.0
+offset_bottom = 648.0
+color = Color(0.5568628, 0.5568628, 0.5568628, 1)
+
+[node name="Near" type="Control" parent="HUD/FPView" unique_id=1070695842]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Front" type="ColorRect" parent="HUD/FPView/Near" unique_id=280098423]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_top = 0.225
+anchor_right = 0.8
+anchor_bottom = 0.775
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.92473, 0.92473, 0.92473, 1)
+
+[node name="Left" type="ColorRect" parent="HUD/FPView/Near" unique_id=821658543]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.225
+anchor_right = 0.15
+anchor_bottom = 0.775
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.9254902, 0.9254902, 0.9254902, 1)
+
+[node name="Right" type="ColorRect" parent="HUD/FPView/Near" unique_id=1257410190]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.85
+anchor_top = 0.225
+anchor_right = 1.0
+anchor_bottom = 0.775
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.9254902, 0.9254902, 0.9254902, 1)
+
+[connection signal="acted" from="World/Player" to="." method="_on_player_acted"]
