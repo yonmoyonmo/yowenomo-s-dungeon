@@ -2,6 +2,14 @@
 
 [ext_resource type="Script" uid="uid://o5abgxvt1nh6" path="res://player.gd" id="1_wbfu4"]
 [ext_resource type="Script" uid="uid://uhlf4ggs2ysq" path="res://game.gd" id="1_xkndl"]
+[ext_resource type="Script" uid="uid://ctg1tflsifw7m" path="res://hud.gd" id="3_p3i8m"]
+[ext_resource type="Texture2D" uid="uid://d0xl6e3e5dia" path="res://art/ceiling.png" id="4_ceiling"]
+[ext_resource type="Texture2D" uid="uid://c64cy7vuwy1db" path="res://art/left.png" id="4_left"]
+[ext_resource type="Texture2D" uid="uid://d05p35ts6r7ur" path="res://art/right.png" id="4_right"]
+[ext_resource type="Texture2D" uid="uid://brfga8la6rdh0" path="res://art/wall.png" id="4_wall"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_r0x5m"]
+load_path = "res://.godot/imported/floor.png-f9cc33924475e04750e8c43aaa181733.ctex"
 
 [node name="Control" type="Control" unique_id=1761922556]
 layout_mode = 3
@@ -32,6 +40,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 961.0
 grow_horizontal = 2
+script = ExtResource("3_p3i8m")
 
 [node name="TurnLabel" type="Label" parent="HUD" unique_id=891015923]
 layout_mode = 1
@@ -62,11 +71,166 @@ theme_override_font_sizes/font_size = 40
 
 [node name="FPView" type="Control" parent="HUD" unique_id=862265846]
 layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -270.0
+offset_right = 270.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_group_ = true
+
+[node name="Far3" type="Control" parent="HUD/FPView" unique_id=1359425171]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Front" type="TextureRect" parent="HUD/FPView/Far3" unique_id=2055526718]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.475
+anchor_top = 0.39
+anchor_right = 0.525
+anchor_bottom = 0.51
+offset_left = -80.5
+offset_top = -61.099976
+offset_right = 93.5
+offset_bottom = 66.100006
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_wall")
+expand_mode = 1
+
+[node name="Left" type="TextureRect" parent="HUD/FPView/Far3" unique_id=1163591031]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.39
+anchor_right = 0.12
+anchor_bottom = 0.51
+offset_top = -68.099976
+offset_right = 91.200005
+offset_bottom = 116.100006
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_left")
+expand_mode = 1
+
+[node name="Right" type="TextureRect" parent="HUD/FPView/Far3" unique_id=1155870416]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.88
+anchor_top = 0.39
+anchor_right = 1.0
+anchor_bottom = 0.51
+offset_left = -87.20001
+offset_top = -53.099976
+offset_bottom = 89.100006
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_right")
+expand_mode = 1
+
+[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Far3" unique_id=1012917424]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.39
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ceiling")
+expand_mode = 1
+
+[node name="Floor" type="TextureRect" parent="HUD/FPView/Far3" unique_id=1054483731]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.51
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_r0x5m")
+expand_mode = 1
+
+[node name="Far2" type="Control" parent="HUD/FPView" unique_id=1804529932]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Front" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1529182609]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.45
+anchor_top = 0.36
+anchor_right = 0.55
+anchor_bottom = 0.54
+offset_left = -106.0
+offset_top = -43.900024
+offset_right = 133.0
+offset_bottom = 42.899994
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_wall")
+expand_mode = 1
+
+[node name="Left" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1564961224]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.36
+anchor_right = 0.15
+anchor_bottom = 0.54
+offset_top = -81.900024
+offset_right = 51.0
+offset_bottom = 116.899994
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_left")
+expand_mode = 1
+
+[node name="Right" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1246030691]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.85
+anchor_top = 0.36
+anchor_right = 1.0
+anchor_bottom = 0.54
+offset_left = -54.0
+offset_top = -73.900024
+offset_bottom = 95.899994
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_right")
+expand_mode = 1
+
+[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1948724302]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.36
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ceiling")
+expand_mode = 1
+
+[node name="Floor" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1369407190]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.54
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_r0x5m")
+expand_mode = 1
 
 [node name="Far" type="Control" parent="HUD/FPView" unique_id=36344148]
 layout_mode = 1
@@ -76,32 +240,69 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Front" type="ColorRect" parent="HUD/FPView/Far" unique_id=1418913906]
+[node name="Front" type="TextureRect" parent="HUD/FPView/Far" unique_id=1418913906]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.375
-anchor_top = 0.4
-anchor_right = 0.625
-anchor_bottom = 0.6
+anchor_left = 0.4
+anchor_top = 0.32
+anchor_right = 0.6
+anchor_bottom = 0.58
+offset_left = -96.0
+offset_top = -62.299988
+offset_right = 116.0
+offset_bottom = 72.30002
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.12382164, 0.12382164, 0.12382164, 1)
+texture = ExtResource("4_wall")
+expand_mode = 1
 
-[node name="Left" type="ColorRect" parent="HUD/FPView/Far" unique_id=1286707315]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 384.0
-offset_right = 204.0
-offset_bottom = 580.0
-color = Color(0.1254902, 0.1254902, 0.1254902, 1)
+[node name="Left" type="TextureRect" parent="HUD/FPView/Far" unique_id=1286707315]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.32
+anchor_right = 0.2
+anchor_bottom = 0.58
+offset_top = -35.299988
+offset_bottom = 63.30002
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_left")
+expand_mode = 1
 
-[node name="Right" type="ColorRect" parent="HUD/FPView/Far" unique_id=1197469434]
-layout_mode = 0
-offset_left = 338.0
-offset_top = 386.0
-offset_right = 536.0
-offset_bottom = 581.0
-color = Color(0.1254902, 0.1254902, 0.1254902, 1)
+[node name="Right" type="TextureRect" parent="HUD/FPView/Far" unique_id=1197469434]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_top = 0.32
+anchor_right = 1.0
+anchor_bottom = 0.58
+offset_top = -60.299988
+offset_bottom = 81.30002
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_right")
+expand_mode = 1
+
+[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Far" unique_id=312446332]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.32
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ceiling")
+expand_mode = 1
+
+[node name="Floor" type="TextureRect" parent="HUD/FPView/Far" unique_id=489240551]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.58
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_r0x5m")
+expand_mode = 1
 
 [node name="Mid" type="Control" parent="HUD/FPView" unique_id=1628483226]
 layout_mode = 1
@@ -111,32 +312,65 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Front" type="ColorRect" parent="HUD/FPView/Mid" unique_id=1528784288]
+[node name="Front" type="TextureRect" parent="HUD/FPView/Mid" unique_id=1528784288]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.3
-anchor_top = 0.325
+anchor_top = 0.26
 anchor_right = 0.7
-anchor_bottom = 0.675
+anchor_bottom = 0.64
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.5586679, 0.55866766, 0.55866766, 1)
+texture = ExtResource("4_wall")
+expand_mode = 1
 
-[node name="Left" type="ColorRect" parent="HUD/FPView/Mid" unique_id=636402946]
-layout_mode = 0
-offset_left = 378.0
-offset_top = 312.0
-offset_right = 540.0
-offset_bottom = 650.0
-color = Color(0.5568628, 0.5568628, 0.5568628, 1)
+[node name="Left" type="TextureRect" parent="HUD/FPView/Mid" unique_id=636402946]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.26
+anchor_right = 0.25
+anchor_bottom = 0.64
+offset_top = -47.899994
+offset_bottom = 90.899994
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_left")
+expand_mode = 1
 
-[node name="Right" type="ColorRect" parent="HUD/FPView/Mid" unique_id=1422221915]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 312.0
-offset_right = 162.0
-offset_bottom = 648.0
-color = Color(0.5568628, 0.5568628, 0.5568628, 1)
+[node name="Right" type="TextureRect" parent="HUD/FPView/Mid" unique_id=1422221915]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.26
+anchor_right = 1.0
+anchor_bottom = 0.64
+offset_top = -53.899994
+offset_bottom = 100.899994
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_right")
+expand_mode = 1
+
+[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Mid" unique_id=491345945]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.26
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ceiling")
+expand_mode = 1
+
+[node name="Floor" type="TextureRect" parent="HUD/FPView/Mid" unique_id=2034670496]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.64
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_r0x5m")
+expand_mode = 1
 
 [node name="Near" type="Control" parent="HUD/FPView" unique_id=1070695842]
 layout_mode = 1
@@ -146,36 +380,187 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Front" type="ColorRect" parent="HUD/FPView/Near" unique_id=280098423]
+[node name="Front" type="TextureRect" parent="HUD/FPView/Near" unique_id=280098423]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.2
-anchor_top = 0.225
+anchor_top = 0.18
 anchor_right = 0.8
-anchor_bottom = 0.775
+anchor_bottom = 0.72
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.92473, 0.92473, 0.92473, 1)
+texture = ExtResource("4_wall")
+expand_mode = 1
 
-[node name="Left" type="ColorRect" parent="HUD/FPView/Near" unique_id=821658543]
+[node name="Left" type="TextureRect" parent="HUD/FPView/Near" unique_id=821658543]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.225
-anchor_right = 0.15
-anchor_bottom = 0.775
+anchor_top = 0.18
+anchor_right = 0.18
+anchor_bottom = 0.72
+offset_top = -95.70001
+offset_bottom = 147.69998
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.9254902, 0.9254902, 0.9254902, 1)
+texture = ExtResource("4_left")
+expand_mode = 1
 
-[node name="Right" type="ColorRect" parent="HUD/FPView/Near" unique_id=1257410190]
+[node name="Right" type="TextureRect" parent="HUD/FPView/Near" unique_id=1257410190]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.85
-anchor_top = 0.225
+anchor_left = 0.82
+anchor_top = 0.18
 anchor_right = 1.0
-anchor_bottom = 0.775
+anchor_bottom = 0.72
+offset_top = -88.70001
+offset_bottom = 150.69998
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.9254902, 0.9254902, 0.9254902, 1)
+texture = ExtResource("4_right")
+expand_mode = 1
+
+[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Near" unique_id=676757226]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.18
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ceiling")
+expand_mode = 1
+
+[node name="Floor" type="TextureRect" parent="HUD/FPView/Near" unique_id=1211049102]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.72
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_r0x5m")
+expand_mode = 1
+
+[node name="MiniMap" type="TextureRect" parent="HUD" unique_id=2013370477]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 46.0
+offset_top = -223.0
+offset_right = 258.0
+offset_bottom = -13.0
+grow_vertical = 0
+
+[node name="Controls" type="Control" parent="HUD" unique_id=1474665200]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BtnForward" type="Button" parent="HUD/Controls" unique_id=1608516610]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -146.0
+offset_top = -162.0
+offset_right = -103.0
+offset_bottom = -99.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "앞"
+
+[node name="BtnBack" type="Button" parent="HUD/Controls" unique_id=2035115477]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -145.0
+offset_top = -84.0
+offset_right = -102.0
+offset_bottom = -21.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "뒤"
+
+[node name="BtnLeft" type="Button" parent="HUD/Controls" unique_id=1952010580]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -223.0
+offset_top = -84.0
+offset_right = -180.0
+offset_bottom = -21.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "왼"
+
+[node name="BtnRight" type="Button" parent="HUD/Controls" unique_id=1692660821]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -67.0
+offset_top = -81.0
+offset_right = -24.0
+offset_bottom = -18.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "오"
+
+[node name="BtnTurnLeft" type="Button" parent="HUD/Controls" unique_id=1523678488]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -246.0
+offset_top = -176.0
+offset_right = -169.0
+offset_bottom = -113.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "좌돌"
+
+[node name="BtnTurnRight" type="Button" parent="HUD/Controls" unique_id=271813833]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -82.0
+offset_top = -177.0
+offset_right = -5.0
+offset_bottom = -114.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "우돌"
 
 [connection signal="acted" from="World/Player" to="." method="_on_player_acted"]
+[connection signal="pressed" from="HUD/Controls/BtnForward" to="HUD" method="_on_btn_forward_pressed"]
+[connection signal="pressed" from="HUD/Controls/BtnBack" to="HUD" method="_on_btn_back_pressed"]
+[connection signal="pressed" from="HUD/Controls/BtnLeft" to="HUD" method="_on_btn_left_pressed"]
+[connection signal="pressed" from="HUD/Controls/BtnRight" to="HUD" method="_on_btn_right_pressed"]
+[connection signal="pressed" from="HUD/Controls/BtnTurnLeft" to="HUD" method="_on_btn_turn_left_pressed"]
+[connection signal="pressed" from="HUD/Controls/BtnTurnRight" to="HUD" method="_on_btn_turn_right_pressed"]
