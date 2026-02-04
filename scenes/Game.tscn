@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://c2grb65ca7nbx"]
+[gd_scene format=3 uid="uid://d36e1s4mfcwji"]
 
-[ext_resource type="Script" uid="uid://o5abgxvt1nh6" path="res://player.gd" id="1_wbfu4"]
-[ext_resource type="Script" uid="uid://uhlf4ggs2ysq" path="res://game.gd" id="1_xkndl"]
-[ext_resource type="Script" uid="uid://ctg1tflsifw7m" path="res://hud.gd" id="3_p3i8m"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_wbfu4"]
+[ext_resource type="Script" uid="uid://uhlf4ggs2ysq" path="res://scripts/game.gd" id="1_xkndl"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="3_p3i8m"]
 [ext_resource type="Texture2D" uid="uid://d0xl6e3e5dia" path="res://art/ceiling.png" id="4_ceiling"]
 [ext_resource type="Texture2D" uid="uid://c64cy7vuwy1db" path="res://art/left.png" id="4_left"]
 [ext_resource type="Texture2D" uid="uid://d05p35ts6r7ur" path="res://art/right.png" id="4_right"]
@@ -83,154 +83,6 @@ offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_group_ = true
-
-[node name="Far3" type="Control" parent="HUD/FPView" unique_id=1359425171]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Front" type="TextureRect" parent="HUD/FPView/Far3" unique_id=2055526718]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.475
-anchor_top = 0.39
-anchor_right = 0.525
-anchor_bottom = 0.51
-offset_left = -80.5
-offset_top = -61.099976
-offset_right = 93.5
-offset_bottom = 66.100006
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_wall")
-expand_mode = 1
-
-[node name="Left" type="TextureRect" parent="HUD/FPView/Far3" unique_id=1163591031]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.39
-anchor_right = 0.12
-anchor_bottom = 0.51
-offset_top = -68.099976
-offset_right = 91.200005
-offset_bottom = 116.100006
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_left")
-expand_mode = 1
-
-[node name="Right" type="TextureRect" parent="HUD/FPView/Far3" unique_id=1155870416]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.88
-anchor_top = 0.39
-anchor_right = 1.0
-anchor_bottom = 0.51
-offset_left = -87.20001
-offset_top = -53.099976
-offset_bottom = 89.100006
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_right")
-expand_mode = 1
-
-[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Far3" unique_id=1012917424]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.39
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_ceiling")
-expand_mode = 1
-
-[node name="Floor" type="TextureRect" parent="HUD/FPView/Far3" unique_id=1054483731]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.51
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("CompressedTexture2D_r0x5m")
-expand_mode = 1
-
-[node name="Far2" type="Control" parent="HUD/FPView" unique_id=1804529932]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Front" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1529182609]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.45
-anchor_top = 0.36
-anchor_right = 0.55
-anchor_bottom = 0.54
-offset_left = -106.0
-offset_top = -43.900024
-offset_right = 133.0
-offset_bottom = 42.899994
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_wall")
-expand_mode = 1
-
-[node name="Left" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1564961224]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.36
-anchor_right = 0.15
-anchor_bottom = 0.54
-offset_top = -81.900024
-offset_right = 51.0
-offset_bottom = 116.899994
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_left")
-expand_mode = 1
-
-[node name="Right" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1246030691]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.85
-anchor_top = 0.36
-anchor_right = 1.0
-anchor_bottom = 0.54
-offset_left = -54.0
-offset_top = -73.900024
-offset_bottom = 95.899994
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_right")
-expand_mode = 1
-
-[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1948724302]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.36
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_ceiling")
-expand_mode = 1
-
-[node name="Floor" type="TextureRect" parent="HUD/FPView/Far2" unique_id=1369407190]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.54
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("CompressedTexture2D_r0x5m")
-expand_mode = 1
 
 [node name="Far" type="Control" parent="HUD/FPView" unique_id=36344148]
 layout_mode = 1
@@ -445,10 +297,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 46.0
-offset_top = -223.0
-offset_right = 258.0
-offset_bottom = -13.0
+offset_left = 22.0
+offset_top = -276.0
+offset_right = 272.0
+offset_bottom = -26.0
 grow_vertical = 0
 
 [node name="Controls" type="Control" parent="HUD" unique_id=1474665200]

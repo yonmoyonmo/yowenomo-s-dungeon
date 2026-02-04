@@ -7,9 +7,11 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
 func _on_button_pressed():
-	get_tree().change_scene_to_file("res://Game.tscn")
+	var err := get_tree().change_scene_to_file("res://scenes/Game.tscn")
+	if err != OK:
+		push_error("Failed to change scene: %s" % err)

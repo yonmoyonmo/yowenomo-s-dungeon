@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="yowenomo's-dungeon"
-run/main_scene="uid://bn6k6ox7nutlx"
+run/main_scene="res://scenes/Title.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://art/icons/icon.svg"
 
 [autoload]
 
-GameState="*uid://cy44letfk7ikb"
+GameState="*res://scripts/GameState.gd"
 
 [display]
 
