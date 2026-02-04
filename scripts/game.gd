@@ -3,6 +3,11 @@ extends Control
 const DungeonGeneratorModule = preload("res://scripts/dungeon_generator.gd")
 const MiniMapRendererModule = preload("res://scripts/minimap.gd")
 const FPViewControllerModule = preload("res://scripts/fp_view.gd")
+const TEX_SIDE = preload("res://art/side.png")
+const TEX_OUTER_L = preload("res://art/outer_corner_L.png")
+const TEX_OUTER_R = preload("res://art/outer_corner_R.png")
+const TEX_INNER_L = preload("res://art/inner_corner_L.png")
+const TEX_INNER_R = preload("res://art/inner_corner_R.png")
 
 # =========================
 # HUD / Player references
@@ -27,22 +32,13 @@ const FPViewControllerModule = preload("res://scripts/fp_view.gd")
 @onready var fp_ff: TextureRect = $HUD/FPView/Far/Front
 @onready var fp_fl: TextureRect = $HUD/FPView/Far/Left
 @onready var fp_fr: TextureRect = $HUD/FPView/Far/Right
-@onready var fp_fc: TextureRect = $HUD/FPView/Far/Ceiling
-@onready var fp_fo: TextureRect = $HUD/FPView/Far/Floor
-
-
-@onready var fp_mc: TextureRect = $HUD/FPView/Mid/Ceiling
-@onready var fp_mo: TextureRect = $HUD/FPView/Mid/Floor
-
-@onready var fp_nc: TextureRect = $HUD/FPView/Near/Ceiling
-@onready var fp_no: TextureRect = $HUD/FPView/Near/Floor
 
 # =========================
 # Procedural map params
 # =========================
-@export var map_w := 31
-@export var map_h := 31
-@export var seed_value := 12345
+@export var map_w := 21
+@export var map_h := 21
+@export var seed_value := Time.get_unix_time_from_system()
 @export var corridor_density := 0.7
 
 # dungeon[y][x] : 1 wall, 0 floor
@@ -61,6 +57,7 @@ var fp_view: FPViewController
 # =========================
 func _ready():
 	dungeon_gen = DungeonGeneratorModule.new()
+	print("Dungeon seed:", seed_value)
 	var result = dungeon_gen.generate(map_w, map_h, seed_value, corridor_density)
 	dungeon = result["grid"]
 	map_h = dungeon.size()
@@ -74,8 +71,14 @@ func _ready():
 		[fp_nf, fp_mf, fp_ff],
 		[fp_nl, fp_ml, fp_fl],
 		[fp_nr, fp_mr, fp_fr],
-		[fp_nc, fp_mc, fp_fc],
-		[fp_no, fp_mo, fp_fo]
+		{
+			"side_continue": TEX_SIDE,
+			"side_end": TEX_SIDE,
+			"outer_left": TEX_OUTER_L,
+			"outer_right": TEX_OUTER_R,
+			"inner_left": TEX_INNER_L,
+			"inner_right": TEX_INNER_R
+		}
 	)
 	_build_minimap()
 	
@@ -127,7 +130,6 @@ func _on_hud_action(action: String):
 func _on_player_acted(action_text: String):
 	turn += 1
 	turn_label.text = "TURN: %d" % turn
-	log_label.text = action_text
 	_update_dir_label()
 	_update_fp_depth3()
 	_build_minimap()
@@ -183,6 +185,41 @@ func _update_fp_depth3():
 		_right_vec(),
 		Callable(self, "is_wall")
 	)
+	log_label.text = _build_corner_debug()
+
+func _build_corner_debug() -> String:
+	var f = player.cell + _front_vec()
+	var l = f + _left_vec()
+	var r = f + _right_vec()
+	var fl = l + _front_vec()
+	var fr = r + _front_vec()
+
+	var f_wall: bool = is_wall(f)
+	var l_wall: bool = is_wall(l)
+	var r_wall: bool = is_wall(r)
+	var fl_wall: bool = is_wall(fl)
+	var fr_wall: bool = is_wall(fr)
+
+	var l_type := _side_type(f_wall, l_wall, fl_wall)
+	var r_type := _side_type(f_wall, r_wall, fr_wall)
+	return "F=%s L=%s R=%s | L:%s R:%s" % [
+		"W" if f_wall else "O",
+		"W" if l_wall else "O",
+		"W" if r_wall else "O",
+		l_type,
+		r_type
+	]
+
+func _side_type(f_wall: bool, side_wall: bool, diag_wall: bool) -> String:
+	if side_wall and not f_wall and diag_wall:
+		return "outer_corner"
+	if (not side_wall) and f_wall and diag_wall:
+		return "inner_corner"
+	if side_wall and diag_wall:
+		return "side_continue"
+	if side_wall and (not diag_wall):
+		return "side_end"
+	return "empty"
 
 func _build_minimap():
 	var tex := minimap_renderer.build_minimap(

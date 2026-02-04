@@ -3,13 +3,8 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_wbfu4"]
 [ext_resource type="Script" uid="uid://uhlf4ggs2ysq" path="res://scripts/game.gd" id="1_xkndl"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="3_p3i8m"]
-[ext_resource type="Texture2D" uid="uid://d0xl6e3e5dia" path="res://art/ceiling.png" id="4_ceiling"]
-[ext_resource type="Texture2D" uid="uid://c64cy7vuwy1db" path="res://art/left.png" id="4_left"]
-[ext_resource type="Texture2D" uid="uid://d05p35ts6r7ur" path="res://art/right.png" id="4_right"]
+[ext_resource type="Texture2D" uid="uid://yuslkok8jcs7" path="res://art/side.png" id="4_side"]
 [ext_resource type="Texture2D" uid="uid://brfga8la6rdh0" path="res://art/wall.png" id="4_wall"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_r0x5m"]
-load_path = "res://.godot/imported/floor.png-f9cc33924475e04750e8c43aaa181733.ctex"
 
 [node name="Control" type="Control" unique_id=1761922556]
 layout_mode = 3
@@ -19,12 +14,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xkndl")
-
-[node name="Label" type="Label" parent="." unique_id=1452611000]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Game"
 
 [node name="World" type="Node2D" parent="." unique_id=589566301]
 
@@ -48,15 +37,16 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -40.0
-offset_bottom = 23.0
+offset_top = 128.0
+offset_bottom = 183.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 40
 
 [node name="LogLabel" type="Label" parent="HUD" unique_id=168247117]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_font_sizes/font_size = 40
+offset_right = 30.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 24
 
 [node name="DirLabel" type="Label" parent="HUD" unique_id=702764812]
 layout_mode = 1
@@ -64,8 +54,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -20.0
+offset_top = 100.0
 offset_right = 20.0
-offset_bottom = 55.0
+offset_bottom = 155.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 
@@ -99,10 +90,9 @@ anchor_left = 0.4
 anchor_top = 0.32
 anchor_right = 0.6
 anchor_bottom = 0.58
-offset_left = -96.0
-offset_top = -62.299988
-offset_right = 116.0
-offset_bottom = 72.30002
+offset_top = -9.299988
+offset_right = 8.0
+offset_bottom = 8.300018
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_wall")
@@ -112,19 +102,19 @@ expand_mode = 1
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.32
-anchor_right = 0.2
+anchor_right = 0.14
 anchor_bottom = 0.58
 offset_top = -35.299988
 offset_bottom = 63.30002
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_left")
+texture = ExtResource("4_side")
 expand_mode = 1
 
 [node name="Right" type="TextureRect" parent="HUD/FPView/Far" unique_id=1197469434]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.8
+anchor_left = 0.86
 anchor_top = 0.32
 anchor_right = 1.0
 anchor_bottom = 0.58
@@ -132,28 +122,7 @@ offset_top = -60.299988
 offset_bottom = 81.30002
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_right")
-expand_mode = 1
-
-[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Far" unique_id=312446332]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.32
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_ceiling")
-expand_mode = 1
-
-[node name="Floor" type="TextureRect" parent="HUD/FPView/Far" unique_id=489240551]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.58
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("CompressedTexture2D_r0x5m")
+texture = ExtResource("4_side")
 expand_mode = 1
 
 [node name="Mid" type="Control" parent="HUD/FPView" unique_id=1628483226]
@@ -180,19 +149,19 @@ expand_mode = 1
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.26
-anchor_right = 0.25
+anchor_right = 0.18
 anchor_bottom = 0.64
 offset_top = -47.899994
 offset_bottom = 90.899994
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_left")
+texture = ExtResource("4_side")
 expand_mode = 1
 
 [node name="Right" type="TextureRect" parent="HUD/FPView/Mid" unique_id=1422221915]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.75
+anchor_left = 0.82
 anchor_top = 0.26
 anchor_right = 1.0
 anchor_bottom = 0.64
@@ -200,28 +169,7 @@ offset_top = -53.899994
 offset_bottom = 100.899994
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_right")
-expand_mode = 1
-
-[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Mid" unique_id=491345945]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.26
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_ceiling")
-expand_mode = 1
-
-[node name="Floor" type="TextureRect" parent="HUD/FPView/Mid" unique_id=2034670496]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.64
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("CompressedTexture2D_r0x5m")
+texture = ExtResource("4_side")
 expand_mode = 1
 
 [node name="Near" type="Control" parent="HUD/FPView" unique_id=1070695842]
@@ -248,19 +196,19 @@ expand_mode = 1
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.18
-anchor_right = 0.18
+anchor_right = 0.22
 anchor_bottom = 0.72
 offset_top = -95.70001
 offset_bottom = 147.69998
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_left")
+texture = ExtResource("4_side")
 expand_mode = 1
 
 [node name="Right" type="TextureRect" parent="HUD/FPView/Near" unique_id=1257410190]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.82
+anchor_left = 0.78
 anchor_top = 0.18
 anchor_right = 1.0
 anchor_bottom = 0.72
@@ -268,28 +216,7 @@ offset_top = -88.70001
 offset_bottom = 150.69998
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_right")
-expand_mode = 1
-
-[node name="Ceiling" type="TextureRect" parent="HUD/FPView/Near" unique_id=676757226]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.18
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_ceiling")
-expand_mode = 1
-
-[node name="Floor" type="TextureRect" parent="HUD/FPView/Near" unique_id=1211049102]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.72
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("CompressedTexture2D_r0x5m")
+texture = ExtResource("4_side")
 expand_mode = 1
 
 [node name="MiniMap" type="TextureRect" parent="HUD" unique_id=2013370477]

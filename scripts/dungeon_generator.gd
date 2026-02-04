@@ -1,269 +1,271 @@
+# res://scripts/dungeon_generator.gd
 class_name DungeonGenerator
 extends RefCounted
 
-# This generator builds a single-tile-width corridor path (no rooms, no 2x2 floors).
-# Core constraints enforced:
-# 1) No 2x2 FLOOR blocks.
-# 2) Every FLOOR tile has 1~2 orthogonal FLOOR neighbors (no junctions, no wide corridors).
+const WALL: int = 0
+const FLOOR: int = 1
+const DEFAULT_MAX_ATTEMPTS: int = 40
 
-const WALL := 0
-const FLOOR := 1
-
-var _last_start: Vector2i = Vector2i.ZERO
-var _last_exit: Vector2i = Vector2i.ZERO
-
+# ---------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------
 func generate(width: int, height: int, seed_value: int, corridor_density: float = 0.7) -> Dictionary:
-	var rng := RandomNumberGenerator.new()
-	rng.seed = seed_value
+	var w: int = max(width, 5)
+	var h: int = max(height, 5)
+	if (w % 2) == 0:
+		w += 1
+	if (h % 2) == 0:
+		h += 1
 
-	var w: int = _ensure_odd(width)
-	var h: int = _ensure_odd(height)
+	var density: float = clamp(corridor_density, 0.2, 1.0)
 
-	var max_attempts := 60
-	for attempt in range(max_attempts):
-		var grid: Array = _make_grid(w, h, WALL)
+	for attempt: int in range(DEFAULT_MAX_ATTEMPTS):
+		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+		rng.seed = int(seed_value) + attempt * 9973
 
-		var odd_cells: Array = _odd_cells(w, h)
-		if odd_cells.size() < 2:
+		var grid: Array[PackedInt32Array] = _make_grid(w, h, WALL)
+
+		# Border is always WALL, so start must be inside the border.
+		var start: Vector2i = Vector2i(1, 1)
+
+		_carve_maze_region(grid, start, rng, density)
+
+		var exit: Vector2i = _find_farthest_floor(grid, start)
+		if exit == Vector2i(-1, -1):
 			continue
 
-		var target_cells: int = clampi(int(odd_cells.size() * clampf(corridor_density, 0.05, 1.0)), 2, odd_cells.size())
-
-		var start: Vector2i = _pick_start(odd_cells, rng)
-		var path_cells: Array = _build_path(start, target_cells, rng, w, h)
-		if path_cells.is_empty():
-			continue
-
-		_carve_path_cells(grid, path_cells)
-		var exit: Vector2i = _pick_exit_far(path_cells, start, w, h, rng)
-		if exit == Vector2i.ZERO:
-			continue
-
-		_last_start = start
-		_last_exit = exit
-
-		if is_valid(grid, start, exit):
+		if _is_valid(grid, start, exit):
 			return {
 				"grid": grid,
 				"start": start,
 				"exit": exit
 			}
 
-	# fallback (empty)
-	return {
-		"grid": _make_grid(w, h, WALL),
-		"start": Vector2i.ZERO,
-		"exit": Vector2i.ZERO
-	}
+	# Fallback (should rarely happen)
+	var fallback: Array[PackedInt32Array] = _make_grid(5, 5, WALL)
+	fallback[1][1] = FLOOR
+	fallback[1][2] = FLOOR
+	fallback[1][3] = FLOOR
+	return {"grid": fallback, "start": Vector2i(1, 1), "exit": Vector2i(3, 1)}
 
-func is_valid(grid: Array, start: Vector2i = Vector2i(-1, -1), exit: Vector2i = Vector2i(-1, -1)) -> bool:
-	if start == Vector2i(-1, -1):
-		start = _last_start
-	if exit == Vector2i(-1, -1):
-		exit = _last_exit
-
-	var h: int = grid.size()
-	if h == 0:
-		return false
+# ---------------------------------------------------------------------
+# Maze carving (odd-cell randomized DFS)
+# ---------------------------------------------------------------------
+func _carve_maze_region(grid: Array[PackedInt32Array], start: Vector2i, rng: RandomNumberGenerator, density: float) -> void:
 	var w: int = grid[0].size()
+	var h: int = grid.size()
 
-	# 1) 2x2 FLOOR check
-	for y in range(h - 1):
-		for x in range(w - 1):
-			if grid[y][x] == FLOOR \
-				and grid[y][x + 1] == FLOOR \
-				and grid[y + 1][x] == FLOOR \
-				and grid[y + 1][x + 1] == FLOOR:
-				return false
+	# Count odd cells
+	var odd_cells: Array[Vector2i] = []
+	for y: int in range(1, h - 1, 2):
+		for x: int in range(1, w - 1, 2):
+			odd_cells.append(Vector2i(x, y))
 
-	# 2) neighbor count 1~2 for every FLOOR
-	for y in range(h):
-		for x in range(w):
-			if grid[y][x] != FLOOR:
-				continue
-			var n := _floor_neighbors(grid, x, y)
-			if n < 1 or n > 2:
-				return false
+	var target_cells: int = int(ceil(float(odd_cells.size()) * density))
+	target_cells = clamp(target_cells, 2, odd_cells.size())
 
-	# 3) BFS connectivity start -> all floors (and exit reachable)
-	if not _in_bounds(start, w, h) or not _in_bounds(exit, w, h):
-		return false
-	if grid[start.y][start.x] != FLOOR or grid[exit.y][exit.x] != FLOOR:
-		return false
+	# IMPORTANT: visited is NOT erased on backtrack (or you get "snake" dungeons).
+	var visited: Dictionary[String, bool] = {}
+	var stack: Array[Vector2i] = []
 
-	var visited: Dictionary = {}
-	var queue: Array = [start]
 	visited[_key(start)] = true
-	while queue.size() > 0:
-		var cur: Vector2i = queue.pop_front()
-		for dir in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
-			var nx: int = cur.x + dir.x
-			var ny: int = cur.y + dir.y
-			if not _in_bounds_xy(nx, ny, w, h):
-				continue
-			if grid[ny][nx] != FLOOR:
-				continue
-			var k: String = "%d,%d" % [nx, ny]
-			if visited.has(k):
-				continue
-			visited[k] = true
-			queue.append(Vector2i(nx, ny))
+	stack.append(start)
 
-	# ensure all floors reachable
-	for y in range(h):
-		for x in range(w):
-			if grid[y][x] == FLOOR:
-				if not visited.has("%d,%d" % [x, y]):
-					return false
+	grid[start.y][start.x] = FLOOR
+	var visited_count: int = 1
 
-	return visited.has(_key(exit))
+	while stack.size() > 0 and visited_count < target_cells:
+		var cur: Vector2i = stack[stack.size() - 1]
 
-func print_grid(grid: Array, start: Vector2i, exit: Vector2i) -> void:
-	var h: int = grid.size()
-	if h == 0:
-		print("(empty grid)")
-		return
+		var dirs: Array[Vector2i] = [
+			Vector2i(2, 0), Vector2i(-2, 0), Vector2i(0, 2), Vector2i(0, -2)
+		]
+		_shuffle_in_place_vec2i(dirs, rng)
+
+		var advanced: bool = false
+		for d: Vector2i in dirs:
+			var nxt: Vector2i = cur + d
+			if nxt.x <= 0 or nxt.y <= 0 or nxt.x >= w - 1 or nxt.y >= h - 1:
+				continue
+
+			var nk: String = _key(nxt)
+			if visited.has(nk):
+				continue
+
+			# Carve wall between cur and nxt (midpoint is one step away)
+			var mid: Vector2i = Vector2i(cur.x + d.x / 2, cur.y + d.y / 2)
+			grid[mid.y][mid.x] = FLOOR
+			grid[nxt.y][nxt.x] = FLOOR
+
+			visited[nk] = true
+			stack.append(nxt)
+			visited_count += 1
+			advanced = true
+			break
+
+		if not advanced:
+			stack.pop_back()
+
+# ---------------------------------------------------------------------
+# Validation
+# ---------------------------------------------------------------------
+func _is_valid(grid: Array[PackedInt32Array], start: Vector2i, exit: Vector2i) -> bool:
 	var w: int = grid[0].size()
-	for y in range(h):
+	var h: int = grid.size()
+
+	# 1) Border must be walls
+	for x: int in range(w):
+		if grid[0][x] != WALL:
+			return false
+		if grid[h - 1][x] != WALL:
+			return false
+	for y: int in range(h):
+		if grid[y][0] != WALL:
+			return false
+		if grid[y][w - 1] != WALL:
+			return false
+
+	# 2) Start/exit must be floor
+	if not _in_bounds(grid, start) or grid[start.y][start.x] != FLOOR:
+		return false
+	if not _in_bounds(grid, exit) or grid[exit.y][exit.x] != FLOOR:
+		return false
+
+	# 3) No 2x2 floor blocks (room prevention)
+	for y: int in range(h - 1):
+		for x: int in range(w - 1):
+			if grid[y][x] == FLOOR \
+			and grid[y][x + 1] == FLOOR \
+			and grid[y + 1][x] == FLOOR \
+			and grid[y + 1][x + 1] == FLOOR:
+				return false
+
+	# 4) Connectivity: start -> exit reachable
+	var d: int = _bfs_dist(grid, start, exit)
+	return d >= 0
+
+# ---------------------------------------------------------------------
+# Exit selection (BFS farthest)
+# ---------------------------------------------------------------------
+func _find_farthest_floor(grid: Array[PackedInt32Array], start: Vector2i) -> Vector2i:
+	if not _in_bounds(grid, start) or grid[start.y][start.x] != FLOOR:
+		return Vector2i(-1, -1)
+
+	var q: Array[Vector2i] = []
+	var head: int = 0
+
+	var dist: Dictionary[String, int] = {}
+	dist[_key(start)] = 0
+	q.append(start)
+
+	var far: Vector2i = start
+	var far_d: int = 0
+
+	while head < q.size():
+		var cur: Vector2i = q[head]
+		head += 1
+
+		var cur_key: String = _key(cur)
+		var cur_d: int = dist[cur_key]
+
+		if cur_d > far_d:
+			far_d = cur_d
+			far = cur
+
+		for n: Vector2i in _neighbors4(cur):
+			if not _in_bounds(grid, n):
+				continue
+			if grid[n.y][n.x] != FLOOR:
+				continue
+			var nk: String = _key(n)
+			if dist.has(nk):
+				continue
+			dist[nk] = cur_d + 1
+			q.append(n)
+
+	return far
+
+func _bfs_dist(grid: Array[PackedInt32Array], start: Vector2i, goal: Vector2i) -> int:
+	var q: Array[Vector2i] = []
+	var head: int = 0
+
+	var dist: Dictionary[String, int] = {}
+	dist[_key(start)] = 0
+	q.append(start)
+
+	while head < q.size():
+		var cur: Vector2i = q[head]
+		head += 1
+
+		if cur == goal:
+			return dist[_key(cur)]
+
+		var cur_d: int = dist[_key(cur)]
+		for n: Vector2i in _neighbors4(cur):
+			if not _in_bounds(grid, n):
+				continue
+			if grid[n.y][n.x] != FLOOR:
+				continue
+			var nk: String = _key(n)
+			if dist.has(nk):
+				continue
+			dist[nk] = cur_d + 1
+			q.append(n)
+
+	return -1
+
+# ---------------------------------------------------------------------
+# Debug
+# ---------------------------------------------------------------------
+func print_grid(grid: Array[PackedInt32Array], start: Vector2i, exit: Vector2i) -> void:
+	var h: int = grid.size()
+	var w: int = grid[0].size()
+	for y: int in range(h):
 		var line: String = ""
-		for x in range(w):
-			if start == Vector2i(x, y):
+		for x: int in range(w):
+			var p: Vector2i = Vector2i(x, y)
+			if p == start:
 				line += "S"
-			elif exit == Vector2i(x, y):
+			elif p == exit:
 				line += "E"
-			elif grid[y][x] == FLOOR:
-				line += "."
 			else:
-				line += "#"
+				line += "." if grid[y][x] == FLOOR else "#"
 		print(line)
 
-func _ready() -> void:
-	var result := generate(41, 41, 12345, 0.7)
-	var grid: Array = result["grid"]
-	var start: Vector2i = result["start"]
-	var exit: Vector2i = result["exit"]
-	var floor_count: int = _count_floors(grid)
-	print("start=", start, " exit=", exit, " floors=", floor_count)
-	print_grid(grid, start, exit)
-
-func _build_path(start: Vector2i, target_cells: int, rng: RandomNumberGenerator, w: int, h: int) -> Array:
-	var path: Array = [start]
-	var visited: Dictionary = {}
-	visited[_key(start)] = true
-
-	var max_iter: int = w * h * 10
-	var iter := 0
-	while path.size() < target_cells and iter < max_iter:
-		iter += 1
-		var cur: Vector2i = path[path.size() - 1]
-		var next: Vector2i = _pick_unvisited_neighbor(cur, visited, rng, w, h)
-		if next == Vector2i.ZERO:
-			# backtrack
-			if path.size() <= 1:
-				break
-			visited.erase(_key(cur))
-			path.pop_back()
-			continue
-
-		path.append(next)
-		visited[_key(next)] = true
-
-	if path.size() < 2:
-		return []
-	return path
-
-func _carve_path_cells(grid: Array, path: Array) -> void:
-	# carve all nodes and walls between consecutive nodes
-	grid[path[0].y][path[0].x] = FLOOR
-	for i in range(1, path.size()):
-		var prev: Vector2i = path[i - 1]
-		var cur: Vector2i = path[i]
-		var mid := Vector2i(int((prev.x + cur.x) / 2.0), int((prev.y + cur.y) / 2.0))
-		grid[mid.y][mid.x] = FLOOR
-		grid[cur.y][cur.x] = FLOOR
-
-func _pick_unvisited_neighbor(cur: Vector2i, visited: Dictionary, rng: RandomNumberGenerator, w: int, h: int) -> Vector2i:
-	var candidates: Array = []
-	for dir in [Vector2i(2, 0), Vector2i(-2, 0), Vector2i(0, 2), Vector2i(0, -2)]:
-		var nx: int = cur.x + dir.x
-		var ny: int = cur.y + dir.y
-		if nx < 1 or ny < 1 or nx >= w - 1 or ny >= h - 1:
-			continue
-		var k: String = "%d,%d" % [nx, ny]
-		if visited.has(k):
-			continue
-		candidates.append(Vector2i(nx, ny))
-
-	if candidates.is_empty():
-		return Vector2i.ZERO
-	return candidates[rng.randi_range(0, candidates.size() - 1)]
-
-func _pick_exit_far(path_cells: Array, start: Vector2i, w: int, h: int, rng: RandomNumberGenerator) -> Vector2i:
-	var min_dist: int = int((w + h) / 4.0)
-	var candidates: Array = []
-	for c in path_cells:
-		if start == c:
-			continue
-		var d: int = abs(c.x - start.x) + abs(c.y - start.y)
-		if d >= min_dist:
-			candidates.append(c)
-
-	if candidates.is_empty():
-		return Vector2i.ZERO
-	return candidates[rng.randi_range(0, candidates.size() - 1)]
-
-func _odd_cells(w: int, h: int) -> Array:
-	var cells: Array = []
-	for y in range(1, h - 1, 2):
-		for x in range(1, w - 1, 2):
-			cells.append(Vector2i(x, y))
-	return cells
-
-func _pick_start(cells: Array, rng: RandomNumberGenerator) -> Vector2i:
-	return cells[rng.randi_range(0, cells.size() - 1)]
-
-func _make_grid(w: int, h: int, value: int) -> Array:
-	var grid: Array = []
-	for y in range(h):
-		var row: Array = []
+# ---------------------------------------------------------------------
+# Utilities
+# ---------------------------------------------------------------------
+func _make_grid(w: int, h: int, fill_value: int) -> Array[PackedInt32Array]:
+	var grid: Array[PackedInt32Array] = []
+	grid.resize(h)
+	for y: int in range(h):
+		var row: PackedInt32Array = PackedInt32Array()
 		row.resize(w)
-		for x in range(w):
-			row[x] = value
-		grid.append(row)
+		for x: int in range(w):
+			row[x] = fill_value
+		grid[y] = row
 	return grid
 
-func _count_floors(grid: Array) -> int:
-	var count: int = 0
-	for row in grid:
-		for v in row:
-			if v == FLOOR:
-				count += 1
-	return count
+func _neighbors4(p: Vector2i) -> Array[Vector2i]:
+	return [
+		Vector2i(p.x + 1, p.y),
+		Vector2i(p.x - 1, p.y),
+		Vector2i(p.x, p.y + 1),
+		Vector2i(p.x, p.y - 1),
+	]
 
-func _floor_neighbors(grid: Array, x: int, y: int) -> int:
-	var w: int = grid[0].size()
+func _in_bounds(grid: Array[PackedInt32Array], p: Vector2i) -> bool:
 	var h: int = grid.size()
-	var n: int = 0
-	if x > 0 and grid[y][x - 1] == FLOOR:
-		n += 1
-	if x < w - 1 and grid[y][x + 1] == FLOOR:
-		n += 1
-	if y > 0 and grid[y - 1][x] == FLOOR:
-		n += 1
-	if y < h - 1 and grid[y + 1][x] == FLOOR:
-		n += 1
-	return n
+	var w: int = grid[0].size()
+	return p.x >= 0 and p.y >= 0 and p.x < w and p.y < h
 
-func _ensure_odd(v: int) -> int:
-	if v % 2 == 0:
-		return v - 1
-	return v
+func _key(p: Vector2i) -> String:
+	return str(p.x) + "," + str(p.y)
 
-func _in_bounds(pos: Vector2i, w: int, h: int) -> bool:
-	return _in_bounds_xy(pos.x, pos.y, w, h)
-
-func _in_bounds_xy(x: int, y: int, w: int, h: int) -> bool:
-	return x >= 0 and y >= 0 and x < w and y < h
-
-func _key(pos: Vector2i) -> String:
-	return "%d,%d" % [pos.x, pos.y]
+func _shuffle_in_place_vec2i(arr: Array[Vector2i], rng: RandomNumberGenerator) -> void:
+	# Fisher–Yates
+	for i: int in range(arr.size() - 1, 0, -1):
+		var j: int = rng.randi_range(0, i)
+		var tmp: Vector2i = arr[i]
+		arr[i] = arr[j]
+		arr[j] = tmp
