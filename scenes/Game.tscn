@@ -3,8 +3,11 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_wbfu4"]
 [ext_resource type="Script" uid="uid://uhlf4ggs2ysq" path="res://scripts/game.gd" id="1_xkndl"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="3_p3i8m"]
-[ext_resource type="Texture2D" uid="uid://yuslkok8jcs7" path="res://art/side.png" id="4_side"]
-[ext_resource type="Texture2D" uid="uid://brfga8la6rdh0" path="res://art/wall.png" id="4_wall"]
+[ext_resource type="Texture2D" uid="uid://bikb4se28p6sr" path="res://art/bottom.png" id="4_bottom"]
+[ext_resource type="Texture2D" uid="uid://djux4qml6hrcm" path="res://art/center.png" id="4_center"]
+[ext_resource type="Texture2D" uid="uid://dhuw6qpukonnr" path="res://art/left.png" id="4_left"]
+[ext_resource type="Texture2D" uid="uid://ccbsw3lk7x6qi" path="res://art/right.png" id="4_right"]
+[ext_resource type="Texture2D" uid="uid://d1cgsepfwm8qe" path="res://art/top.png" id="4_top"]
 
 [node name="Control" type="Control" unique_id=1761922556]
 layout_mode = 3
@@ -60,7 +63,7 @@ offset_bottom = 155.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 
-[node name="FPView" type="Control" parent="HUD" unique_id=862265846]
+[node name="FPView" type="Control" parent="HUD" unique_id=1647037164]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -75,7 +78,133 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_group_ = true
 
-[node name="Far" type="Control" parent="HUD/FPView" unique_id=36344148]
+[node name="Far" type="Control" parent="HUD/FPView" unique_id=327872745]
+layout_mode = 1
+anchor_left = 0.375
+anchor_top = 0.375
+anchor_right = 0.625
+anchor_bottom = 0.625
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="TextureRect" parent="HUD/FPView/Far" unique_id=1301459928]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.25
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_top")
+expand_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="HUD/FPView/Far" unique_id=1847450657]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.75
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_bottom")
+expand_mode = 1
+
+[node name="Left" type="TextureRect" parent="HUD/FPView/Far" unique_id=1009898383]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.25
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_left")
+expand_mode = 1
+
+[node name="Right" type="TextureRect" parent="HUD/FPView/Far" unique_id=1418212269]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_right")
+expand_mode = 1
+
+[node name="Center" type="TextureRect" parent="HUD/FPView/Far" unique_id=1978790121]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_center")
+expand_mode = 1
+
+[node name="Mid" type="Control" parent="HUD/FPView" unique_id=160800899]
+layout_mode = 1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="TextureRect" parent="HUD/FPView/Mid" unique_id=1201625018]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.25
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_top")
+expand_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="HUD/FPView/Mid" unique_id=701616382]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.75
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_bottom")
+expand_mode = 1
+
+[node name="Left" type="TextureRect" parent="HUD/FPView/Mid" unique_id=1759084431]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.25
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_left")
+expand_mode = 1
+
+[node name="Right" type="TextureRect" parent="HUD/FPView/Mid" unique_id=2104976864]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_right")
+expand_mode = 1
+
+[node name="Center" type="TextureRect" parent="HUD/FPView/Mid" unique_id=265573723]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_center")
+expand_mode = 1
+
+[node name="Near" type="Control" parent="HUD/FPView" unique_id=2090115727]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,140 +212,58 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Front" type="TextureRect" parent="HUD/FPView/Far" unique_id=1418913906]
+[node name="Top" type="TextureRect" parent="HUD/FPView/Near" unique_id=747579462]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.4
-anchor_top = 0.32
-anchor_right = 0.6
-anchor_bottom = 0.58
-offset_top = -9.299988
-offset_right = 8.0
-offset_bottom = 8.300018
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_wall")
-expand_mode = 1
-
-[node name="Left" type="TextureRect" parent="HUD/FPView/Far" unique_id=1286707315]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.32
-anchor_right = 0.14
-anchor_bottom = 0.58
-offset_top = -35.299988
-offset_bottom = 63.30002
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_side")
-expand_mode = 1
-
-[node name="Right" type="TextureRect" parent="HUD/FPView/Far" unique_id=1197469434]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.86
-anchor_top = 0.32
 anchor_right = 1.0
-anchor_bottom = 0.58
-offset_top = -60.299988
-offset_bottom = 81.30002
+anchor_bottom = 0.25
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_side")
+texture = ExtResource("4_top")
 expand_mode = 1
 
-[node name="Mid" type="Control" parent="HUD/FPView" unique_id=1628483226]
+[node name="Bottom" type="TextureRect" parent="HUD/FPView/Near" unique_id=2090241152]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_top = 0.75
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Front" type="TextureRect" parent="HUD/FPView/Mid" unique_id=1528784288]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3
-anchor_top = 0.26
-anchor_right = 0.7
-anchor_bottom = 0.64
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_wall")
+texture = ExtResource("4_bottom")
 expand_mode = 1
 
-[node name="Left" type="TextureRect" parent="HUD/FPView/Mid" unique_id=636402946]
+[node name="Left" type="TextureRect" parent="HUD/FPView/Near" unique_id=1545713865]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.26
-anchor_right = 0.18
-anchor_bottom = 0.64
-offset_top = -47.899994
-offset_bottom = 90.899994
+anchor_right = 0.25
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_side")
+texture = ExtResource("4_left")
 expand_mode = 1
 
-[node name="Right" type="TextureRect" parent="HUD/FPView/Mid" unique_id=1422221915]
+[node name="Right" type="TextureRect" parent="HUD/FPView/Near" unique_id=1962953205]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.82
-anchor_top = 0.26
-anchor_right = 1.0
-anchor_bottom = 0.64
-offset_top = -53.899994
-offset_bottom = 100.899994
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_side")
-expand_mode = 1
-
-[node name="Near" type="Control" parent="HUD/FPView" unique_id=1070695842]
-layout_mode = 1
-anchors_preset = 15
+anchor_left = 0.75
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Front" type="TextureRect" parent="HUD/FPView/Near" unique_id=280098423]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.2
-anchor_top = 0.18
-anchor_right = 0.8
-anchor_bottom = 0.72
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_wall")
+texture = ExtResource("4_right")
 expand_mode = 1
 
-[node name="Left" type="TextureRect" parent="HUD/FPView/Near" unique_id=821658543]
+[node name="Center" type="TextureRect" parent="HUD/FPView/Near" unique_id=1859878306]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.18
-anchor_right = 0.22
-anchor_bottom = 0.72
-offset_top = -95.70001
-offset_bottom = 147.69998
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_side")
-expand_mode = 1
-
-[node name="Right" type="TextureRect" parent="HUD/FPView/Near" unique_id=1257410190]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.78
-anchor_top = 0.18
-anchor_right = 1.0
-anchor_bottom = 0.72
-offset_top = -88.70001
-offset_bottom = 150.69998
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_side")
+texture = ExtResource("4_center")
 expand_mode = 1
 
 [node name="MiniMap" type="TextureRect" parent="HUD" unique_id=2013370477]

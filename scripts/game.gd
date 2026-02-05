@@ -3,11 +3,11 @@ extends Control
 const DungeonGeneratorModule = preload("res://scripts/dungeon_generator.gd")
 const MiniMapRendererModule = preload("res://scripts/minimap.gd")
 const FPViewControllerModule = preload("res://scripts/fp_view.gd")
-const TEX_SIDE = preload("res://art/side.png")
-const TEX_OUTER_L = preload("res://art/outer_corner_L.png")
-const TEX_OUTER_R = preload("res://art/outer_corner_R.png")
-const TEX_INNER_L = preload("res://art/inner_corner_L.png")
-const TEX_INNER_R = preload("res://art/inner_corner_R.png")
+const TEX_TOP = preload("res://art/top.png")
+const TEX_BOTTOM = preload("res://art/bottom.png")
+const TEX_CENTER = preload("res://art/center.png")
+const TEX_LEFT = preload("res://art/left.png")
+const TEX_RIGHT = preload("res://art/right.png")
 
 # =========================
 # HUD / Player references
@@ -19,17 +19,23 @@ const TEX_INNER_R = preload("res://art/inner_corner_R.png")
 @onready var hud = $HUD
 
 # =========================
-# FPView (Depth 3) ColorRects
+# FPView (Depth 3) TextureRects
 # =========================
-@onready var fp_nf: TextureRect = $HUD/FPView/Near/Front
+@onready var fp_nt: TextureRect = $HUD/FPView/Near/Top
+@onready var fp_nb: TextureRect = $HUD/FPView/Near/Bottom
+@onready var fp_nc: TextureRect = $HUD/FPView/Near/Center
 @onready var fp_nl: TextureRect = $HUD/FPView/Near/Left
 @onready var fp_nr: TextureRect = $HUD/FPView/Near/Right
 
-@onready var fp_mf: TextureRect = $HUD/FPView/Mid/Front
+@onready var fp_mt: TextureRect = $HUD/FPView/Mid/Top
+@onready var fp_mb: TextureRect = $HUD/FPView/Mid/Bottom
+@onready var fp_mc: TextureRect = $HUD/FPView/Mid/Center
 @onready var fp_ml: TextureRect = $HUD/FPView/Mid/Left
 @onready var fp_mr: TextureRect = $HUD/FPView/Mid/Right
 
-@onready var fp_ff: TextureRect = $HUD/FPView/Far/Front
+@onready var fp_ft: TextureRect = $HUD/FPView/Far/Top
+@onready var fp_fb: TextureRect = $HUD/FPView/Far/Bottom
+@onready var fp_fc: TextureRect = $HUD/FPView/Far/Center
 @onready var fp_fl: TextureRect = $HUD/FPView/Far/Left
 @onready var fp_fr: TextureRect = $HUD/FPView/Far/Right
 
@@ -68,16 +74,17 @@ func _ready():
 
 	minimap_renderer = MiniMapRendererModule.new()
 	fp_view = FPViewControllerModule.new(
-		[fp_nf, fp_mf, fp_ff],
+		[fp_nc, fp_mc, fp_fc],
 		[fp_nl, fp_ml, fp_fl],
 		[fp_nr, fp_mr, fp_fr],
+		[fp_nt, fp_mt, fp_ft],
+		[fp_nb, fp_mb, fp_fb],
 		{
-			"side_continue": TEX_SIDE,
-			"side_end": TEX_SIDE,
-			"outer_left": TEX_OUTER_L,
-			"outer_right": TEX_OUTER_R,
-			"inner_left": TEX_INNER_L,
-			"inner_right": TEX_INNER_R
+			"top": TEX_TOP,
+			"bottom": TEX_BOTTOM,
+			"center": TEX_CENTER,
+			"left": TEX_LEFT,
+			"right": TEX_RIGHT
 		}
 	)
 	_build_minimap()
@@ -185,41 +192,7 @@ func _update_fp_depth3():
 		_right_vec(),
 		Callable(self, "is_wall")
 	)
-	log_label.text = _build_corner_debug()
-
-func _build_corner_debug() -> String:
-	var f = player.cell + _front_vec()
-	var l = f + _left_vec()
-	var r = f + _right_vec()
-	var fl = l + _front_vec()
-	var fr = r + _front_vec()
-
-	var f_wall: bool = is_wall(f)
-	var l_wall: bool = is_wall(l)
-	var r_wall: bool = is_wall(r)
-	var fl_wall: bool = is_wall(fl)
-	var fr_wall: bool = is_wall(fr)
-
-	var l_type := _side_type(f_wall, l_wall, fl_wall)
-	var r_type := _side_type(f_wall, r_wall, fr_wall)
-	return "F=%s L=%s R=%s | L:%s R:%s" % [
-		"W" if f_wall else "O",
-		"W" if l_wall else "O",
-		"W" if r_wall else "O",
-		l_type,
-		r_type
-	]
-
-func _side_type(f_wall: bool, side_wall: bool, diag_wall: bool) -> String:
-	if side_wall and not f_wall and diag_wall:
-		return "outer_corner"
-	if (not side_wall) and f_wall and diag_wall:
-		return "inner_corner"
-	if side_wall and diag_wall:
-		return "side_continue"
-	if side_wall and (not diag_wall):
-		return "side_end"
-	return "empty"
+	log_label.text = ""
 
 func _build_minimap():
 	var tex := minimap_renderer.build_minimap(
