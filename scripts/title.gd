@@ -12,11 +12,6 @@ func _process(_delta: float) -> void:
 
 
 func _on_button_1_pressed():
-	var err := get_tree().change_scene_to_file("res://scenes/Game.tscn")
-	if err != OK:
-		push_error("Failed to change scene: %s" % err)
-
-func _on_button_2_pressed():
-	var err := get_tree().change_scene_to_file("res://scenes/Game2.tscn")
+	var err := get_tree().change_scene_to_file("res://scenes/Dungeon.tscn")
 	if err != OK:
 		push_error("Failed to change scene: %s" % err)

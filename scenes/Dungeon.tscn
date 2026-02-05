@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://b4se0hmpj8eab"]
+[gd_scene format=3 uid="uid://cikjsoif4xhod"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_8hw8b"]
-[ext_resource type="Script" path="res://scripts/game_2.gd" id="1_eetn8"]
+[ext_resource type="Script" uid="uid://dm1g1nfw3dlvq" path="res://scripts/dungeon.gd" id="1_eetn8"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="2_eetn8"]
 [ext_resource type="Script" uid="uid://dqsjh6qhgishb" path="res://scripts/raycast_view.gd" id="4_akvk8"]
 [ext_resource type="Texture2D" uid="uid://djux4qml6hrcm" path="res://art/center.png" id="5_2625v"]

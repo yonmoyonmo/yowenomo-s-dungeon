@@ -1,4 +1,4 @@
-# game_2.gd
+# dungeon.gd
 extends Control
 
 const DungeonGeneratorModule = preload("res://scripts/dungeon_generator_game2.gd")
