@@ -16,7 +16,7 @@ func build_minimap(
 
 	for y in range(map_h):
 		for x in range(map_w):
-			if dungeon[y][x] == 1:
+			if dungeon[y][x] == 0:
 				img.set_pixel(x, y, Color(0.1, 0.1, 0.1)) # 벽
 			else:
 				img.set_pixel(x, y, Color(0.9, 0.9, 0.9)) # 바닥

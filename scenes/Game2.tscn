@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_8hw8b"]
 [ext_resource type="Script" uid="uid://dm1g1nfw3dlvq" path="res://scripts/game_2.gd" id="1_eetn8"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="2_eetn8"]
+[ext_resource type="Script" uid="uid://dqsjh6qhgishb" path="res://scripts/raycast_view.gd" id="4_akvk8"]
+[ext_resource type="Texture2D" uid="uid://djux4qml6hrcm" path="res://art/center.png" id="5_2625v"]
 
 [node name="Control" type="Control" unique_id=845853680]
 layout_mode = 3
@@ -38,16 +40,26 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_eetn8")
 
+[node name="RaycastView" type="Control" parent="HUD" unique_id=616606241]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_akvk8")
+wall_texture = ExtResource("5_2625v")
+
 [node name="TurnLabel" type="Label" parent="HUD" unique_id=1056954689]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -40.0
-offset_top = 128.0
-offset_bottom = 183.0
+offset_bottom = 55.0
 grow_horizontal = 0
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 24
 
 [node name="LogLabel" type="Label" parent="HUD" unique_id=270225754]
 layout_mode = 0
@@ -61,11 +73,10 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -20.0
-offset_top = 100.0
 offset_right = 20.0
-offset_bottom = 155.0
+offset_bottom = 55.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 24
 
 [node name="MiniMap" type="TextureRect" parent="HUD" unique_id=1731341491]
 layout_mode = 1
