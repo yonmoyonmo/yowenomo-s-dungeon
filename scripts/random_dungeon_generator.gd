@@ -1,5 +1,8 @@
-# res://scripts/dungeon_generator_game2.gd
-class_name DungeonGeneratorGame2
+# res://scripts/random_dungeon_generator.gd
+# 랜덤 던전 생성기
+# - 방 생성 + 복도 연결
+# - 시작/출구 선정 및 유효성 검증
+class_name RandomDungeonGenerator
 extends RefCounted
 
 const WALL: int = 0
@@ -15,6 +18,7 @@ const DEFAULT_MAX_ATTEMPTS: int = 20
 # Public API (same signature as existing generator)
 # ---------------------------------------------------------------------
 func generate(width: int, height: int, seed_value: int, corridor_density: float = 0.7) -> Dictionary:
+	# 외부에서 호출되는 메인 API
 	var w: int = max(width, 7)
 	var h: int = max(height, 7)
 	if (w % 2) == 0:
@@ -63,6 +67,7 @@ func generate(width: int, height: int, seed_value: int, corridor_density: float 
 # Rooms
 # ---------------------------------------------------------------------
 func _attempt_rooms(grid: Array[PackedInt32Array], rooms: Array[Rect2i], rng: RandomNumberGenerator, attempts: int) -> void:
+	# 랜덤 방 배치 시도
 	var w: int = grid[0].size()
 	var h: int = grid.size()
 
@@ -80,12 +85,14 @@ func _attempt_rooms(grid: Array[PackedInt32Array], rooms: Array[Rect2i], rng: Ra
 		rooms.append(rect)
 
 func _overlaps(rect: Rect2i, rooms: Array[Rect2i]) -> bool:
+	# 방 겹침 체크(여유 1칸)
 	for r: Rect2i in rooms:
 		if rect.grow(1).intersects(r):
 			return true
 	return false
 
 func _carve_room(grid: Array[PackedInt32Array], rect: Rect2i) -> void:
+	# 방 영역을 바닥으로 변경
 	for y: int in range(rect.position.y, rect.position.y + rect.size.y):
 		for x: int in range(rect.position.x, rect.position.x + rect.size.x):
 			grid[y][x] = FLOOR
@@ -97,6 +104,7 @@ func _room_center(rect: Rect2i) -> Vector2i:
 # Corridors
 # ---------------------------------------------------------------------
 func _connect_rooms(grid: Array[PackedInt32Array], rooms: Array[Rect2i], rng: RandomNumberGenerator) -> void:
+	# 방을 복도로 연결
 	for i: int in range(1, rooms.size()):
 		var a: Vector2i = _room_center(rooms[i - 1])
 		var b: Vector2i = _room_center(rooms[i])
@@ -108,6 +116,7 @@ func _connect_rooms(grid: Array[PackedInt32Array], rooms: Array[Rect2i], rng: Ra
 			_dig_h(grid, a.x, b.x, b.y)
 
 func _dig_h(grid: Array[PackedInt32Array], x1: int, x2: int, y: int) -> void:
+	# 가로 복도
 	var min_x: int = min(x1, x2)
 	var max_x: int = max(x1, x2)
 	for x: int in range(min_x, max_x + 1):
@@ -117,6 +126,7 @@ func _dig_h(grid: Array[PackedInt32Array], x1: int, x2: int, y: int) -> void:
 				grid[yy][x] = FLOOR
 
 func _dig_v(grid: Array[PackedInt32Array], y1: int, y2: int, x: int) -> void:
+	# 세로 복도
 	var min_y: int = min(y1, y2)
 	var max_y: int = max(y1, y2)
 	for y: int in range(min_y, max_y + 1):
@@ -129,6 +139,7 @@ func _dig_v(grid: Array[PackedInt32Array], y1: int, y2: int, x: int) -> void:
 # Validation & Exit
 # ---------------------------------------------------------------------
 func _is_valid(grid: Array[PackedInt32Array], start: Vector2i, exit: Vector2i) -> bool:
+	# 생성 결과 유효성 검사
 	var w: int = grid[0].size()
 	var h: int = grid.size()
 
@@ -155,6 +166,7 @@ func _is_valid(grid: Array[PackedInt32Array], start: Vector2i, exit: Vector2i) -
 	return d >= 0
 
 func _find_farthest_floor(grid: Array[PackedInt32Array], start: Vector2i) -> Vector2i:
+	# 시작점에서 가장 먼 바닥 칸 찾기
 	if not _in_bounds(grid, start) or grid[start.y][start.x] != FLOOR:
 		return Vector2i(-1, -1)
 
@@ -193,6 +205,7 @@ func _find_farthest_floor(grid: Array[PackedInt32Array], start: Vector2i) -> Vec
 	return far
 
 func _bfs_dist(grid: Array[PackedInt32Array], start: Vector2i, goal: Vector2i) -> int:
+	# BFS 거리 계산
 	var q: Array[Vector2i] = []
 	var head: int = 0
 
@@ -225,6 +238,7 @@ func _bfs_dist(grid: Array[PackedInt32Array], start: Vector2i, goal: Vector2i) -
 # Utilities
 # ---------------------------------------------------------------------
 func _make_grid(w: int, h: int, fill_value: int) -> Array[PackedInt32Array]:
+	# 그리드 초기화
 	var grid: Array[PackedInt32Array] = []
 	grid.resize(h)
 	for y: int in range(h):
@@ -236,6 +250,7 @@ func _make_grid(w: int, h: int, fill_value: int) -> Array[PackedInt32Array]:
 	return grid
 
 func _neighbors4(p: Vector2i) -> Array[Vector2i]:
+	# 4방향 이웃
 	return [
 		Vector2i(p.x + 1, p.y),
 		Vector2i(p.x - 1, p.y),
@@ -244,9 +259,11 @@ func _neighbors4(p: Vector2i) -> Array[Vector2i]:
 	]
 
 func _in_bounds(grid: Array[PackedInt32Array], p: Vector2i) -> bool:
+	# 범위 체크
 	var h: int = grid.size()
 	var w: int = grid[0].size()
 	return p.x >= 0 and p.y >= 0 and p.x < w and p.y < h
 
 func _key(p: Vector2i) -> String:
+	# Dictionary 키용 문자열
 	return str(p.x) + "," + str(p.y)

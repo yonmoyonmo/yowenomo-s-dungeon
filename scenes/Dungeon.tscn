@@ -1,10 +1,11 @@
 [gd_scene format=3 uid="uid://cikjsoif4xhod"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_8hw8b"]
-[ext_resource type="Script" uid="uid://dm1g1nfw3dlvq" path="res://scripts/dungeon.gd" id="1_eetn8"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="2_eetn8"]
+[ext_resource type="Script" uid="uid://o5abgxvt1nh6" path="res://scripts/player.gd" id="1_8hw8b"]
+[ext_resource type="Script" uid="uid://ck1g5p7gyk78q" path="res://scripts/dungeon.gd" id="1_eetn8"]
+[ext_resource type="Script" uid="uid://ctg1tflsifw7m" path="res://scripts/hud.gd" id="2_eetn8"]
 [ext_resource type="Script" uid="uid://dqsjh6qhgishb" path="res://scripts/raycast_view.gd" id="4_akvk8"]
 [ext_resource type="Texture2D" uid="uid://djux4qml6hrcm" path="res://art/center.png" id="5_2625v"]
+[ext_resource type="Texture2D" uid="uid://qrxf0gy5jv7e" path="res://art/monster_test.png" id="6_monster"]
 
 [node name="Control" type="Control" unique_id=845853680]
 layout_mode = 3
@@ -40,6 +41,112 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_eetn8")
 
+[node name="ModalLayer" type="Control" parent="HUD" unique_id=1360676375]
+visible = false
+z_index = 100
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Overlay" type="ColorRect" parent="HUD/ModalLayer" unique_id=1294913110]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Panel" type="Panel" parent="HUD/ModalLayer" unique_id=1150633426]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BtnClose" type="Button" parent="HUD/ModalLayer/Panel" unique_id=935357502]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -40.0
+offset_right = 60.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Close"
+
+[node name="BtnFight" type="Button" parent="HUD/ModalLayer/Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -140.0
+offset_top = -40.0
+offset_right = -20.0
+offset_bottom = -8.0
+grow_horizontal = 2
+text = "Fight"
+visible = false
+
+[node name="BtnRun" type="Button" parent="HUD/ModalLayer/Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -40.0
+offset_right = 140.0
+offset_bottom = -8.0
+grow_horizontal = 2
+text = "Run"
+visible = false
+
+[node name="Title" type="Label" parent="HUD/ModalLayer/Panel" unique_id=121754573]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.0
+offset_top = 12.0
+offset_right = 60.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "Title"
+
+[node name="Body" type="RichTextLabel" parent="HUD/ModalLayer/Panel" unique_id=1793847964]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 52.0
+offset_right = -16.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+fit_content = true
+
 [node name="RaycastView" type="Control" parent="HUD" unique_id=616606241]
 layout_mode = 1
 anchors_preset = 15
@@ -50,6 +157,8 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_akvk8")
 wall_texture = ExtResource("5_2625v")
+monster_texture = ExtResource("6_monster")
+sprite_scale = 1.0
 
 [node name="TurnLabel" type="Label" parent="HUD" unique_id=1056954689]
 layout_mode = 1
@@ -76,6 +185,17 @@ offset_left = -20.0
 offset_right = 20.0
 offset_bottom = 55.0
 grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+
+[node name="GoldLabel" type="Label" parent="HUD" unique_id=1944872394]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 60.0
+offset_bottom = 105.0
+grow_horizontal = 0
 theme_override_font_sizes/font_size = 24
 
 [node name="MiniMap" type="TextureRect" parent="HUD" unique_id=1731341491]
@@ -195,9 +315,42 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "우돌"
 
+[node name="BtnDie" type="Button" parent="HUD/Controls" unique_id=1069837879]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 96.0
+offset_bottom = 48.0
+theme_override_font_sizes/font_size = 20
+text = "죽기"
+
+[node name="BtnStatus" type="Button" parent="HUD/Controls" unique_id=60271486]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 56.0
+offset_right = 120.0
+offset_bottom = 88.0
+theme_override_font_sizes/font_size = 20
+text = "스탯"
+
+[node name="BtnInventory" type="Button" parent="HUD/Controls" unique_id=412958883]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+theme_override_font_sizes/font_size = 20
+text = "인벤"
+
+[connection signal="pressed" from="HUD/ModalLayer/Panel/BtnClose" to="HUD" method="_on_btn_close_modal_pressed"]
+[connection signal="pressed" from="HUD/ModalLayer/Panel/BtnFight" to="HUD" method="_on_btn_fight_pressed"]
+[connection signal="pressed" from="HUD/ModalLayer/Panel/BtnRun" to="HUD" method="_on_btn_run_pressed"]
 [connection signal="pressed" from="HUD/Controls/BtnForward" to="HUD" method="_on_btn_forward_pressed"]
 [connection signal="pressed" from="HUD/Controls/BtnBack" to="HUD" method="_on_btn_back_pressed"]
 [connection signal="pressed" from="HUD/Controls/BtnLeft" to="HUD" method="_on_btn_left_pressed"]
 [connection signal="pressed" from="HUD/Controls/BtnRight" to="HUD" method="_on_btn_right_pressed"]
 [connection signal="pressed" from="HUD/Controls/BtnTurnLeft" to="HUD" method="_on_btn_turn_left_pressed"]
 [connection signal="pressed" from="HUD/Controls/BtnTurnRight" to="HUD" method="_on_btn_turn_right_pressed"]
+[connection signal="pressed" from="HUD/Controls/BtnDie" to="HUD" method="_on_btn_die_pressed"]
+[connection signal="pressed" from="HUD/Controls/BtnStatus" to="HUD" method="_on_btn_status_pressed"]
+[connection signal="pressed" from="HUD/Controls/BtnInventory" to="HUD" method="_on_btn_inventory_pressed"]
